@@ -1,5 +1,8 @@
 import bs4
 import urllib.request
+import xml.dom.minidom
+
+from xml.etree.ElementTree import Element, SubElement, tostring
 
 def process_page(url):
 	with urllib.request.urlopen(url) as response:
@@ -9,12 +12,26 @@ def process_page(url):
 
 def extract_definitions(soup):
 	ps = soup.find(id='mw-content-text').find_all('p')
+
+	key = None
+	text = None
+
 	for p in ps:
-		if len(p.contents) < 2: continue
-		if p.contents[0].name != 'b': continue
-		key = extract_text(p.contents[0])
-		description = ' '.join(map(extract_text, p.contents[1:])).strip()
-		yield (key, description)
+		cnt = [t for t in p.contents if t.name != 'br' and (type(t) != bs4.element.NavigableString or t.strip() != '')]
+		if not cnt: continue
+		if cnt[0].name == 'b':
+			if key is not None: yield (key, text)
+			key = extract_text(cnt[0])
+			text = extract_text_arr(cnt[1:])
+		else:
+			if key is None: continue
+			text += ' ' + extract_text_arr(cnt)
+
+	if key is not None:
+		yield (key, text)
+
+def extract_text_arr(tags):
+	return ''.join(map(extract_text, tags)).strip()
 
 def extract_text(tag):
 	if 'text' in dir(tag):
@@ -67,6 +84,22 @@ urls = [
 	'/david-foster-wallace/index.php?title=Pages_964-981',
 	'/david-foster-wallace/index.php?title=Notes_and_Errata_-_Pages_983-1079']
 
+html = Element('html', {
+	'xmlns:idx': 'www.mobipocket.com',
+	'xmlns:mbp': 'www.mobipocket.com',
+	'xmlns:xlink': 'http://www.w3.org/1999/xlink'
+})
+
+body = Element('body')
+html.append(body)
+
 for url in urls:
 	for d in process_page('http://infinitejest.wallacewiki.com' + url):
-		print(d[0] + '\t' + d[1])
+		idx_el = SubElement(body, 'idx:entry', { 'name': 'word', 'scriptable': 'yes' })
+		orth_el = SubElement(idx_el, 'idx:orth', { 'value': d[0] })
+		key_el = SubElement(idx_el, 'h2')
+		key_el.text = d[0]
+		desc_el = SubElement(idx_el, 'span')
+		desc_el.text = d[1]
+
+print(xml.dom.minidom.parseString(tostring(html, 'utf-8')).toprettyxml())

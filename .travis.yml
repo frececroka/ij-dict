@@ -1,4 +1,6 @@
-install: ./install-buildtools.sh
+install:
+  - ./install-buildtools.sh
+  - easy_install3 --user beautifulsoup4
 script: make
 deploy:
   on:
@@ -10,3 +12,10 @@ deploy:
   acl: public_read
   skip_cleanup: true
   local_dir: build
+addons:
+  apt:
+    sources:
+      - deadsnakes
+    packages:
+      - python3
+      - python3-setuptools

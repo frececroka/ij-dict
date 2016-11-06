@@ -22,7 +22,7 @@
 
 	<!-- list of all the files needed to produce the .prc file -->
 	<manifest>
-		<item id="dictionary0" href="ij-dict0.html" media-type="text/x-oeb1-document"/>
+		<item id="dictionary0" href="build/ij-dict0.html" media-type="text/x-oeb1-document"/>
 		<item id="characters" href="characters.html" media-type="text/x-oeb1-document"/>
 	</manifest>
 
