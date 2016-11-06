@@ -1,0 +1,12 @@
+install: ./install-buildtools.sh
+script: make
+deploy:
+  on:
+    branch: master
+  provider: s3
+  access_key_id: $ARTIFACTS_KEY
+  secret_access_key: $ARTIFACTS_SECRET
+  bucket: $ARTIFACTS_BUCKET
+  acl: public_read
+  skip_cleanup: true
+  local_dir: build
