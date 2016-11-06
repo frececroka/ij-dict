@@ -1,4 +1,6 @@
-# Infinite Jest - Annotations
+# Infinite Jest Annotations Dictionary
+
+[![Build Status](https://travis-ci.org/frececroka/ij-dict.svg?branch=master)](https://travis-ci.org/frececroka/ij-dict)
 
 This is a rudimentary dictionary meant to be used while reading Infinite Jest on a Kindle. It incorporates the page-by-page annotations from the [Infinite Jest wiki](http://infinitejest.wallacewiki.com/) and a few character descriptions.
 
