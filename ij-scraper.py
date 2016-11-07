@@ -1,6 +1,7 @@
 import bs4
 import urllib.request
 import xml.dom.minidom
+import re
 
 from xml.etree.ElementTree import Element, SubElement, tostring
 
@@ -101,5 +102,9 @@ for url in urls:
 		key_el.text = d[0]
 		desc_el = SubElement(idx_el, 'span')
 		desc_el.text = d[1]
+		infl_el = SubElement(orth_el, 'idx:infl')
+		for infl in re.split(r'\W+', d[0]):
+			if infl == '': continue
+			SubElement(infl_el, 'idx:iform', { 'value': infl })
 
 print(xml.dom.minidom.parseString(tostring(html, 'utf-8')).toprettyxml())
