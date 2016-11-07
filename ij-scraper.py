@@ -18,27 +18,35 @@ def extract_definitions(soup):
 	text = None
 
 	for p in ps:
-		cnt = [t for t in p.contents if t.name != 'br' and (type(t) != bs4.element.NavigableString or t.strip() != '')]
-		if not cnt: continue
-		if cnt[0].name == 'b':
-			if key is not None: yield (key, text)
-			key = extract_text(cnt[0])
-			text = extract_text_arr(cnt[1:])
+		nkey = extract_key(p)
+		if nkey is not None:
+			if key is not None:
+				yield (key, text)
+			key = nkey.strip()
+			text = p.text[len(nkey):].strip()
 		else:
 			if key is None: continue
-			text += ' ' + extract_text_arr(cnt)
+			text += ' ' + p.text.strip()
 
 	if key is not None:
 		yield (key, text)
 
-def extract_text_arr(tags):
-	return ''.join(map(extract_text, tags)).strip()
-
-def extract_text(tag):
-	if 'text' in dir(tag):
-		return tag.text.strip()
-	else:
-		return tag.string.strip()
+def extract_key(p):
+	prefix = ''
+	for c in p.contents:
+		if type(c) == bs4.element.NavigableString:
+			if re.match(r'[\'"]*', c.strip()):
+				prefix += c
+				continue
+			else:
+				return None
+		elif c.text == '':
+			continue
+		elif c.name == 'b' or c.name == 'i':
+			return prefix + c.text
+		else:
+			return None
+	return None
 
 pages = [
 	'Pages_3-27',

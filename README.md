@@ -10,4 +10,3 @@ Open issues:
 
 + The coverage of characters in this dictionary is lacking.
 + Many of the page-by-page annotations are not suitable for the dictionary format. This includes annotations for a longer group of words, for instance quotes.
-+ The `ij-scraper-py` pulls the page-by-page annotations from the IJ wiki. It fails to parse some of these annotations. The two prevailing markups are `<p><b>Keyword</b> <br/> Description</p>` and `<p><b>Keyword</b></p><p>Description</p>`. The scraper can handle the former but not the latter.
