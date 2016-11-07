@@ -97,14 +97,13 @@ html.append(body)
 for url in urls:
 	for d in process_page('http://infinitejest.wallacewiki.com' + url):
 		idx_el = SubElement(body, 'idx:entry', { 'name': 'word', 'scriptable': 'yes' })
-		orth_el = SubElement(idx_el, 'idx:orth', { 'value': d[0] })
+		SubElement(idx_el, 'idx:orth', { 'value': d[0] })
+		for part in re.split(r'\W+', d[0]):
+			if part == '' or part == d[0]: continue
+			SubElement(idx_el, 'idx:orth', { 'value': part })
 		key_el = SubElement(idx_el, 'h2')
 		key_el.text = d[0]
 		desc_el = SubElement(idx_el, 'span')
 		desc_el.text = d[1]
-		infl_el = SubElement(orth_el, 'idx:infl')
-		for infl in re.split(r'\W+', d[0]):
-			if infl == '': continue
-			SubElement(infl_el, 'idx:iform', { 'value': infl })
 
 print(xml.dom.minidom.parseString(tostring(html, 'utf-8')).toprettyxml())
