@@ -1,7 +1,9 @@
 install:
   - ./install-buildtools.sh
   - easy_install3 --user beautifulsoup4
-script: make
+script:
+  - mkdir build
+  - make
 deploy:
   on:
     branch: master
