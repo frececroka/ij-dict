@@ -4,6 +4,8 @@
 
 This is a rudimentary dictionary meant to be used while reading Infinite Jest on a Kindle. It incorporates the page-by-page annotations from the [Infinite Jest wiki](http://infinitejest.wallacewiki.com/) and a few character descriptions.
 
+![The dictionary in action](screenshot.png)
+
 You can find the latest build from the CI server [here](https://s3.amazonaws.com/ij-dict/ij-dict.mobi).
 
 Open issues:
