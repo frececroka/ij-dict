@@ -1,5 +1,4 @@
 install:
-  - ./install-buildtools.sh
   - easy_install3 --user beautifulsoup4
 script:
   - mkdir build
